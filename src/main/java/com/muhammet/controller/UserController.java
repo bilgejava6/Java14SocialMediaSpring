@@ -2,11 +2,14 @@ package com.muhammet.controller;
 
 import com.muhammet.dto.request.UserLoginRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
+import com.muhammet.dto.response.SearchUserResponseDto;
 import com.muhammet.entity.User;
 import com.muhammet.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +29,11 @@ public class UserController {
         if(userService.login(dto).isEmpty())
             return ResponseEntity.badRequest().build();
         return ResponseEntity.ok("token");
+    }
+
+    @GetMapping("/search")
+    @CrossOrigin("*")
+    public ResponseEntity<List<SearchUserResponseDto>> getUserList(String userName){
+        return ResponseEntity.ok(userService.search(userName));
     }
 }
