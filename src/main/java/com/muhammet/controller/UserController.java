@@ -2,8 +2,11 @@ package com.muhammet.controller;
 
 import com.muhammet.dto.request.UserLoginRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
+import com.muhammet.dto.response.ResponseDto;
 import com.muhammet.dto.response.SearchUserResponseDto;
 import com.muhammet.entity.User;
+import com.muhammet.exception.AuthException;
+import com.muhammet.exception.ErrorType;
 import com.muhammet.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +28,14 @@ public class UserController {
 
     @PostMapping("/login")
     @CrossOrigin("*")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequestDto dto){
+    public ResponseEntity<ResponseDto<String>> login(@RequestBody UserLoginRequestDto dto){
         if(userService.login(dto).isEmpty())
-            return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok("token");
+            throw new AuthException(ErrorType.BAD_REQUEST_USERNAME_OR_PASSWORD_ERROR);
+        return ResponseEntity.ok(ResponseDto.<String>builder()
+                        .code(200)
+                        .message("Başarılı şekilde giriş yapıldı")
+                        .data("token")
+                .build());
     }
 
     @GetMapping("/search")
