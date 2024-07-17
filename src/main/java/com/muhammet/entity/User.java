@@ -21,5 +21,11 @@ public class User {
     String email;
     String avatar;
     Long followerCount;
+    Long followingCount;
+    String name;
+    String about;
+    Integer bornDate;
+    String phone;
+    String address;
 
 }
