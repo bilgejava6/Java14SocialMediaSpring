@@ -9,6 +9,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.service.UserService;
+import com.muhammet.views.VwUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +52,21 @@ public class UserController {
     @CrossOrigin("*")
     public ResponseEntity<List<SearchUserResponseDto>> getUserList(String userName){
         return ResponseEntity.ok(userService.search(userName));
+    }
+
+    @GetMapping("/get-profile")
+    @CrossOrigin("*")
+    public ResponseEntity<ResponseDto<VwUserProfile>> getProfile(String token){
+        return ResponseEntity.ok(ResponseDto.<VwUserProfile>builder()
+                        .message("profile bilgileri")
+                        .code(200)
+                        .data(userService.getProfileByToken(token))
+                .build());
+    }
+
+    @PostMapping("/edit/profile")
+    public ResponseEntity<Boolean> editProfile(@RequestBody User user){
+        userService.editProfile(user);
+        return  ResponseEntity.ok(true);
     }
 }
