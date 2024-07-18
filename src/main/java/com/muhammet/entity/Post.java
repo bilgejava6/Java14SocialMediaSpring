@@ -17,6 +17,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Long userId;
+    @Column(length = 5000)
     String comment;
     String photo;
     Long sharedDate;

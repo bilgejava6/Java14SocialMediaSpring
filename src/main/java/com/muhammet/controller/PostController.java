@@ -17,7 +17,8 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("create-post")
+    @PostMapping("/create-post")
+    @CrossOrigin("*")
     public ResponseEntity<ResponseDto<Boolean>> createPost(@RequestBody CreatePostRequestDto dto){
         postService.createPost(dto);
         return ResponseEntity.ok(ResponseDto.<Boolean>builder()
@@ -27,7 +28,8 @@ public class PostController {
                 .build());
     }
 
-    @GetMapping("get-post-list")
+    @GetMapping("/get-post-list")
+    @CrossOrigin("*")
     public ResponseEntity<ResponseDto<List<PostListResponseDto>>> getPostList(String token){
         return ResponseEntity.ok(ResponseDto.<List<PostListResponseDto>>builder()
                         .message("post listesi getirildi.")

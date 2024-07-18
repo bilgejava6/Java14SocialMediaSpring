@@ -19,9 +19,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("select new com.muhammet.views.VwUserProfile(u.name,u.userName,u.avatar,u.followerCount,u.followingCount,u.about,u.bornDate,u.phone,u.address) from User u where u.id=?1")
     VwUserProfile getByAuthId(Long id);
 
-    @Query("select new com.muhammet.views.VwUserAvatar(u.userName,u.avatar) from User u where u.id=?1")
+    @Query("select new com.muhammet.views.VwUserAvatar(u.id,u.userName,u.avatar) from User u where u.id=?1")
     VwUserAvatar getUserAvatar(Long id);
 
-    @Query("select new com.muhammet.views.VwUserAvatar(u.userName,u.avatar) from User u ")
+    @Query("select new com.muhammet.views.VwUserAvatar(u.id,u.userName,u.avatar) from User u ")
     List<VwUserAvatar> getUserAvatarList();
 }
