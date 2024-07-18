@@ -8,14 +8,14 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.UserRepository;
+import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +59,25 @@ public class UserService {
 
     public void editProfile(User user) {
         repository.save(user);
+    }
+
+    public VwUserAvatar getUserAvatar(Long id){
+        return repository.getUserAvatar(id);
+    }
+
+    public List<VwUserAvatar> getUserAvatarList(){
+        return repository.getUserAvatarList();
+    }
+
+    public List<User> findAllByIds(List<Long> userIds){
+        return repository.findAllById(userIds);
+    }
+
+    public Map<Long,User> findAllByIdsMap(List<Long> userIds){
+        List<User> userList = repository.findAllById(userIds);
+        Map<Long,User> result = userList.stream().collect(
+                Collectors.toMap(User::getId,u-> u)
+        );
+        return result;
     }
 }
