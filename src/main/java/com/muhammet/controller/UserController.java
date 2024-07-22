@@ -1,6 +1,7 @@
 package com.muhammet.controller;
 
 import com.muhammet.config.JwtManager;
+import com.muhammet.dto.request.FindAllByUsernameRequestDto;
 import com.muhammet.dto.request.UserLoginRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
 import com.muhammet.dto.response.ResponseDto;
@@ -9,6 +10,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.service.UserService;
+import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -69,4 +71,16 @@ public class UserController {
         userService.editProfile(user);
         return  ResponseEntity.ok(true);
     }
+
+    @PostMapping("/search-user")
+    public ResponseEntity<ResponseDto<List<VwSearchUser>>> findAllByUserName(@RequestBody FindAllByUsernameRequestDto dto){
+        return  ResponseEntity.ok(
+                ResponseDto.<List<VwSearchUser>>builder()
+                        .code(200)
+                        .message("kullanıcılar getirildi.")
+                        .data(userService.getAllByUserName(dto))
+                        .build()
+        );
+    }
+
 }

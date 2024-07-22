@@ -2,6 +2,7 @@ package com.muhammet.repository;
 
 
 import com.muhammet.entity.User;
+import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("select new com.muhammet.views.VwUserAvatar(u.id,u.userName,u.avatar) from User u ")
     List<VwUserAvatar> getUserAvatarList();
+
+    @Query("select new com.muhammet.views.VwSearchUser(u.id,u.userName,u.name,u.avatar) from User u where u.userName ilike ?1")
+    List<VwSearchUser> getAllByUserName(String userName);
 }

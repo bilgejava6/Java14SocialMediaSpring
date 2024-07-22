@@ -1,6 +1,7 @@
 package com.muhammet.service;
 
 import com.muhammet.config.JwtManager;
+import com.muhammet.dto.request.FindAllByUsernameRequestDto;
 import com.muhammet.dto.request.UserLoginRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
 import com.muhammet.dto.response.SearchUserResponseDto;
@@ -8,6 +9,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.UserRepository;
+import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +81,11 @@ public class UserService {
                 Collectors.toMap(User::getId,u-> u)
         );
         return result;
+    }
+
+    public List<VwSearchUser> getAllByUserName(FindAllByUsernameRequestDto dto) {
+        Optional<Long> authId = jwtManager.getAuthId(dto.getToken());
+        if(authId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
+        return repository.getAllByUserName("%"+dto.getUserName()+"%");
     }
 }
