@@ -69,10 +69,14 @@ public class PostService {
         Optional<Post> postOptional = repository.findById(postId);
         if (postOptional.isPresent()){
             Post post = postOptional.get();
+
             if (post.getCommentCount()!=null)
                 post.setCommentCount(post.getCommentCount()+1);
             else
                 post.setCommentCount(1L);
+
+
+            repository.save(post);
         }
     }
 }
