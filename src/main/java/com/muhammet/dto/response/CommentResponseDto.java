@@ -5,21 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PostListResponseDto {
+public class CommentResponseDto {
     Long postId;
+    Long commentId;
     Long userId;
     String userName;
     String avatar;
-    String photo;
     String comment;
-    Long likeCount;
-    Long commentCount;
-    Long sharedDate;
-    List<CommentResponseDto> commentList;
+    Long date;
 }
