@@ -88,4 +88,6 @@ public class UserService {
         if(authId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
         return repository.getAllByUserName("%"+dto.getUserName()+"%");
     }
+
+
 }
