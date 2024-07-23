@@ -5,18 +5,16 @@ import com.muhammet.dto.response.ResponseDto;
 import com.muhammet.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/follow")
+@CrossOrigin(origins = "*", methods ={RequestMethod.POST,RequestMethod.GET})
 public class FollowController {
     private final FollowService followService;
 
-    @PostMapping("add-follow")
+    @PostMapping("/add-follow")
     public ResponseEntity<ResponseDto<Boolean>> addFollow(@RequestBody AddFollowRequestDto dto){
         followService.addFollow(dto);
         return ResponseEntity.ok(ResponseDto.<Boolean>builder()
@@ -26,7 +24,7 @@ public class FollowController {
                 .build());
     }
 
-    @PostMapping("un-follow")
+    @PostMapping("/un-follow")
     public ResponseEntity<ResponseDto<Boolean>> unFollow(@RequestBody AddFollowRequestDto dto){
         followService.unFollow(dto);
         return ResponseEntity.ok(ResponseDto.<Boolean>builder()

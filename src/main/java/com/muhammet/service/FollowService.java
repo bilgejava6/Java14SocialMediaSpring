@@ -3,7 +3,6 @@ package com.muhammet.service;
 import com.muhammet.config.JwtManager;
 import com.muhammet.dto.request.AddFollowRequestDto;
 import com.muhammet.entity.Follow;
-import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.FollowRepository;
@@ -29,9 +28,9 @@ public class FollowService {
      */
     public void addFollow(AddFollowRequestDto dto) {
         Long userId = getUserId(dto);
-        Optional<Follow> optionalFollow = repository.findOptionalByUserIdAndFollowId(userId,dto.folowId());
+        Optional<Follow> optionalFollow = repository.findOptionalByUserIdAndFollowId(userId,dto.followId());
         if (optionalFollow.isEmpty()){
-            add(userId,dto.folowId());
+            add(userId,dto.followId());
         }else {
             switch (optionalFollow.get().getState()){
                 case RED, TAKIP_ETMIYOR:
@@ -41,7 +40,7 @@ public class FollowService {
     }
     public void unFollow(AddFollowRequestDto dto){
         Long userId = getUserId(dto);
-        Optional<Follow> optionalFollow = repository.findOptionalByUserIdAndFollowId(userId,dto.folowId());
+        Optional<Follow> optionalFollow = repository.findOptionalByUserIdAndFollowId(userId,dto.followId());
         if (optionalFollow.isPresent()){
             Follow follow = optionalFollow.get();
             follow.setState(FollowState.TAKIP_ETMIYOR);

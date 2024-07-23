@@ -1,4 +1,4 @@
 package com.muhammet.dto.request;
 
-public record AddFollowRequestDto(String token, Long folowId) {
+public record AddFollowRequestDto(String token, Long followId) {
 }
