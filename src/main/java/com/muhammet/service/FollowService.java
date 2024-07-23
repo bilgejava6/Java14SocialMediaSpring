@@ -7,6 +7,7 @@ import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.FollowRepository;
 import com.muhammet.utility.FollowState;
+import com.muhammet.views.VwSearchUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,13 @@ public class FollowService {
     public List<Long> findAllByUserId(Long userId) {
         List<Follow> followList = repository
                 .findAllByUserIdAndStateIn(userId, List.of(FollowState.TAKIP_EDIYOR,FollowState.ENGELLE,FollowState.BEKLEMEDE));
+        return followList.stream().map(Follow::getFollowId).toList();
+    }
+
+    public List<Long> getAllFollowing(String token) {
+        Optional<Long> userIdOptional = jwtManager.getAuthId(token);
+        if(userIdOptional.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
+        List<Follow> followList = repository.findAllByUserIdAndStateIn(userIdOptional.get(), List.of(FollowState.TAKIP_EDIYOR,FollowState.BEKLEMEDE));
         return followList.stream().map(Follow::getFollowId).toList();
     }
 }

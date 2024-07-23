@@ -34,4 +34,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findAllByUserNameContainingAndIdNotIn(String s, List<Long> followIds, Pageable pageable);
 
     List<User> findAllByUserNameLikeAndIdNotIn(String s, List<Long> followIds, PageRequest of);
+
+    List<User> findAllByIdIn(List<Long> allFollowing, PageRequest of);
 }

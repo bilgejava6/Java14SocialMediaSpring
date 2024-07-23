@@ -91,6 +91,15 @@ public class UserService {
         List<Long> followIds = followService.findAllByUserId(userId.get());
         List<User> userList = repository
                 .findAllByUserNameLikeAndIdNotIn("%"+dto.getUserName()+"%",followIds, PageRequest.of(0,6));
+        return getVwSearchUsers(userList);
+    }
+
+    public List<VwSearchUser> getAllFollowList(List<Long> allFollowing) {
+        List<User> userList = repository.findAllByIdIn(allFollowing, PageRequest.of(0,10));
+        return getVwSearchUsers(userList);
+    }
+
+    private static List<VwSearchUser> getVwSearchUsers(List<User> userList) {
         List<VwSearchUser> result = new ArrayList<>();
         userList.forEach(u->{
             result.add(
@@ -105,6 +114,5 @@ public class UserService {
 
         return result;
     }
-
 
 }
