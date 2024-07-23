@@ -10,7 +10,9 @@ import com.muhammet.utility.FollowState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +68,17 @@ public class FollowService {
                         .userId(userId)
                         .state(FollowState.BEKLEMEDE)
                 .build());
+    }
+
+    /**
+     * Bir kullanıcının zaten takipte olduğu ya da takip isteği gönderdiği
+     * ya da engellendiği tüm follow kayıtlarına ait userId bilgilerini döner.
+     * @param userId
+     * @return
+     */
+    public List<Long> findAllByUserId(Long userId) {
+        List<Follow> followList = repository
+                .findAllByUserIdAndStateIn(userId, List.of(FollowState.TAKIP_EDIYOR,FollowState.ENGELLE,FollowState.BEKLEMEDE));
+        return followList.stream().map(Follow::getFollowId).toList();
     }
 }

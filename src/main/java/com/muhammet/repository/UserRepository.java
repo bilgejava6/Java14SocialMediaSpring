@@ -5,6 +5,8 @@ import com.muhammet.entity.User;
 import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -28,4 +30,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("select new com.muhammet.views.VwSearchUser(u.id,u.userName,u.name,u.avatar) from User u where u.userName ilike ?1")
     List<VwSearchUser> getAllByUserName(String userName);
+
+    List<User> findAllByUserNameContainingAndIdNotIn(String s, List<Long> followIds, Pageable pageable);
+
+    List<User> findAllByUserNameLikeAndIdNotIn(String s, List<Long> followIds, PageRequest of);
 }

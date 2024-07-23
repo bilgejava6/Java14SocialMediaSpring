@@ -13,6 +13,7 @@ import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository repository;
     private final JwtManager jwtManager;
+    private final FollowService followService;
     public User save(UserSaveRequestDto dto) {
         return repository.save(User.builder()
                         .password(dto.getPassword())
@@ -84,9 +86,24 @@ public class UserService {
     }
 
     public List<VwSearchUser> getAllByUserName(FindAllByUsernameRequestDto dto) {
-        Optional<Long> authId = jwtManager.getAuthId(dto.getToken());
-        if(authId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
-        return repository.getAllByUserName("%"+dto.getUserName()+"%");
+        Optional<Long> userId = jwtManager.getAuthId(dto.getToken());
+        if(userId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
+        List<Long> followIds = followService.findAllByUserId(userId.get());
+        List<User> userList = repository
+                .findAllByUserNameLikeAndIdNotIn("%"+dto.getUserName()+"%",followIds, PageRequest.of(0,6));
+        List<VwSearchUser> result = new ArrayList<>();
+        userList.forEach(u->{
+            result.add(
+                    VwSearchUser.builder()
+                            .avatar(u.getAvatar())
+                            .id(u.getId())
+                            .name(u.getName())
+                            .userName(u.getUserName())
+                            .build()
+            );
+        });
+
+        return result;
     }
 
 

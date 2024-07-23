@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class VwSearchUser {
-    Long id;
-    String userName;
-    String name;
-    String avatar;
+    Long id; // 8byte
+    String userName; // 255byte
+    String name; // 255byte
+    String avatar; // 255byte
 }
