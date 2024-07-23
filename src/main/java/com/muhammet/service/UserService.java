@@ -89,6 +89,7 @@ public class UserService {
         Optional<Long> userId = jwtManager.getAuthId(dto.getToken());
         if(userId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
         List<Long> followIds = followService.findAllByUserId(userId.get());
+        if (followIds.isEmpty()) followIds = List.of(0L);
         List<User> userList = repository
                 .findAllByUserNameLikeAndIdNotIn("%"+dto.getUserName()+"%",followIds, PageRequest.of(0,6));
         return getVwSearchUsers(userList);
