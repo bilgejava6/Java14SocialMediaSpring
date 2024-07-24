@@ -4,6 +4,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.muhammet.utility.BucketSubDirectoryName;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.webmvc.ui.SwaggerResourceResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class MediaService {
     @Autowired
     private Storage storage;
+    @Autowired
+    private SwaggerResourceResolver swaggerResourceResolver;
 
     public String uploadAvatarPhotos(MultipartFile file) throws IOException {
         String UUID = java.util.UUID.randomUUID().toString();
@@ -37,12 +40,16 @@ public class MediaService {
     }
 
     public String getPhotoUrl(BucketSubDirectoryName directoryName, String photoName ){
-        String subDirectory = switch (directoryName){
-            case POST -> "post-photos";
-            case AVATAR -> "avatars";
-        };
-        BlobInfo blobInfo = BlobInfo.newBuilder("java-boost-14",subDirectory+"/"+photoName).build();
-        URL url = storage.signUrl(blobInfo, 30,TimeUnit.MINUTES,Storage.SignUrlOption.withV4Signature());
-        return url.toString();
+        try{
+            String subDirectory = switch (directoryName){
+                case POST -> "post-photos";
+                case AVATAR -> "avatars";
+            };
+            BlobInfo blobInfo = BlobInfo.newBuilder("java-boost-14",subDirectory+"/"+photoName).build();
+            URL url = storage.signUrl(blobInfo, 30,TimeUnit.MINUTES,Storage.SignUrlOption.withV4Signature());
+            return url.toString();
+        }catch (Exception exception){
+            return  photoName;
+        }
     }
 }

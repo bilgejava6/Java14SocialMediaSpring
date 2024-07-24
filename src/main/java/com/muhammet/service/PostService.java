@@ -10,6 +10,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.PostRepository;
+import com.muhammet.utility.BucketSubDirectoryName;
 import com.muhammet.views.VwUserAvatar;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class PostService {
     private final UserService userService;
     private final JwtManager jwtManager;
     private final CommentService commentService;
+    private final MediaService mediaService;
     public void createPost(CreatePostRequestDto dto) {
         Optional<Long> userId = jwtManager.getAuthId(dto.getToken());
         if(userId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
@@ -57,7 +59,7 @@ public class PostService {
                     .comment(p.getComment())
                     .commentCount(p.getCommentCount())
                     .likeCount(p.getLikeCount())
-                    .photo(p.getPhoto())
+                    .photo(mediaService.getPhotoUrl(BucketSubDirectoryName.POST,p.getPhoto()))
                     .commentList(commentList.get(p.getId()))
                     .build());
         });

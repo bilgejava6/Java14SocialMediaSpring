@@ -1,7 +1,17 @@
 server:
   port: 9090
-
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 512
+  max-http-request-header-size: 48000
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 2000MB
+      max-request-size: 2150MB
   cloud:
     gcp:
       config:
@@ -15,3 +25,4 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+

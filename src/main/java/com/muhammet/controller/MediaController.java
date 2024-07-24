@@ -23,7 +23,8 @@ public class MediaController {
 
     private final MediaService mediaService;
 
-    @PostMapping(value = "/add-storage-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/add-storage-avatar")
+    @CrossOrigin("*")
     public ResponseEntity<ResponseDto<String>> uploadAvatarFile(@RequestParam("file")MultipartFile file) throws IOException {
             return  ResponseEntity.ok(
                     ResponseDto.<String>builder()
@@ -34,8 +35,9 @@ public class MediaController {
             );
     }
 
-    @PostMapping(value = "/add-storage-post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseDto<String>> uploadPostFile(@RequestParam("file")MultipartFile file) throws IOException {
+    @PostMapping(value = "/add-storage-post")
+    @CrossOrigin("*")
+    public ResponseEntity<ResponseDto<String>> uploadPostFile(@RequestParam("file") MultipartFile file) throws IOException {
         return  ResponseEntity.ok(
                 ResponseDto.<String>builder()
                         .data(mediaService.uploadPostPhotos(file))

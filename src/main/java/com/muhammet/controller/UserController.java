@@ -3,6 +3,7 @@ package com.muhammet.controller;
 import com.muhammet.config.JwtManager;
 import com.muhammet.dto.request.FindAllByUsernameRequestDto;
 import com.muhammet.dto.request.UserLoginRequestDto;
+import com.muhammet.dto.request.UserProfileEditRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
 import com.muhammet.dto.response.ResponseDto;
 import com.muhammet.dto.response.SearchUserResponseDto;
@@ -68,8 +69,8 @@ public class UserController {
     }
 
     @PostMapping("/edit/profile")
-    public ResponseEntity<Boolean> editProfile(@RequestBody User user){
-        userService.editProfile(user);
+    public ResponseEntity<Boolean> editProfile(@RequestBody UserProfileEditRequestDto dto){
+        userService.editProfile(dto);
         return  ResponseEntity.ok(true);
     }
 

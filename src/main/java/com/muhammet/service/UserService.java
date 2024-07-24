@@ -3,6 +3,7 @@ package com.muhammet.service;
 import com.muhammet.config.JwtManager;
 import com.muhammet.dto.request.FindAllByUsernameRequestDto;
 import com.muhammet.dto.request.UserLoginRequestDto;
+import com.muhammet.dto.request.UserProfileEditRequestDto;
 import com.muhammet.dto.request.UserSaveRequestDto;
 import com.muhammet.dto.response.SearchUserResponseDto;
 import com.muhammet.entity.User;
@@ -61,8 +62,20 @@ public class UserService {
         return repository.getByAuthId(authId.get());
     }
 
-    public void editProfile(User user) {
-        repository.save(user);
+    public void editProfile(UserProfileEditRequestDto dto) {
+        Optional<Long> authId = jwtManager.getAuthId(dto.token());
+        if(authId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
+        Optional<User> userOptional = repository.findById(authId.get());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            user.setAbout(dto.about()!=null ? dto.about() : user.getAbout());
+            user.setAddress(dto.address()!=null ? dto.address() : user.getAddress());
+            user.setAvatar(dto.avatar()!=null ? dto.avatar() : user.getAvatar());
+            user.setBornDate(dto.bornDate()!=null ? dto.bornDate() : user.getBornDate());
+            user.setEmail(dto.email()!=null ? dto.email() : user.getEmail());
+            user.setName(dto.name()!=null ? dto.name() : user.getName());
+            repository.save(user);
+        }
     }
 
     public VwUserAvatar getUserAvatar(Long id){
