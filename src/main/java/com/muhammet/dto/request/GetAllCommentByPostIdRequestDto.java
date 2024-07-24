@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class GetAllCommentByPostIdRequestDto {
     String token;
     Long postId;
+    @Builder.Default
     int size = 10;
+    @Builder.Default
     int page = 0;
 }

@@ -2,11 +2,16 @@ server:
   port: 9090
 
 spring:
+  cloud:
+    gcp:
+      config:
+        project-id: hip-field-428707-f0
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5444/java14socilamedia
+    url: ${POSTGRE_URL}
     username: postgres
     password: root
+  #    password: Bilge*!
   jpa:
     hibernate:
       ddl-auto: update
