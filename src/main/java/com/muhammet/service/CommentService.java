@@ -9,6 +9,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.CommentRepository;
+import com.muhammet.utility.BucketSubDirectoryName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,7 @@ public class CommentService {
     private final CommentRepository repository;
     private final JwtManager jwtManager;
     private final UserService userService;
+    private final MediaService mediaService;
     public void addComment(AddCommentRequestDto dto) {
         Optional<Long> userId =  jwtManager.getAuthId(dto.getToken());
         if(userId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
@@ -61,7 +63,7 @@ public class CommentService {
                 commentResponseDtos.add(
                         CommentResponseDto.builder()
                                 .postId(c.getPostId())
-                                .avatar(userMap.get(c.getUserId()).getAvatar())
+                                .avatar(mediaService.getPhotoUrl(BucketSubDirectoryName.AVATAR,userMap.get(c.getUserId()).getAvatar()) )
                                 .comment(c.getComment())
                                 .commentId(c.getId())
                                 .date(c.getDate())

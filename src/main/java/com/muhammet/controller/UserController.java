@@ -68,10 +68,15 @@ public class UserController {
                 .build());
     }
 
-    @PostMapping("/edit/profile")
-    public ResponseEntity<Boolean> editProfile(@RequestBody UserProfileEditRequestDto dto){
+    @PostMapping("/edit-profile")
+    @CrossOrigin("*")
+    public ResponseEntity<ResponseDto<Boolean>> editProfile(@RequestBody UserProfileEditRequestDto dto){
         userService.editProfile(dto);
-        return  ResponseEntity.ok(true);
+        return  ResponseEntity.ok(ResponseDto.<Boolean>builder()
+                .message("ok")
+                .code(200)
+                .data(true)
+                .build());
     }
 
     @PostMapping("/search-user")

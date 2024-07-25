@@ -10,6 +10,7 @@ import com.muhammet.entity.User;
 import com.muhammet.exception.AuthException;
 import com.muhammet.exception.ErrorType;
 import com.muhammet.repository.UserRepository;
+import com.muhammet.utility.BucketSubDirectoryName;
 import com.muhammet.views.VwSearchUser;
 import com.muhammet.views.VwUserAvatar;
 import com.muhammet.views.VwUserProfile;
@@ -27,6 +28,7 @@ public class UserService {
     private final UserRepository repository;
     private final JwtManager jwtManager;
     private final FollowService followService;
+    private final MediaService mediaService;
     public User save(UserSaveRequestDto dto) {
         return repository.save(User.builder()
                         .password(dto.getPassword())
@@ -49,7 +51,7 @@ public class UserService {
         userList.forEach(u->
             result.add(SearchUserResponseDto.builder()
                             .userName(u.getUserName())
-                            .avatar(u.getAvatar())
+                            .avatar(mediaService.getPhotoUrl(BucketSubDirectoryName.AVATAR,u.getAvatar()))
                             .email(u.getEmail())
                     .build())
         );
@@ -59,7 +61,9 @@ public class UserService {
     public VwUserProfile getProfileByToken(String token) {
         Optional<Long> authId = jwtManager.getAuthId(token);
         if(authId.isEmpty()) throw new AuthException(ErrorType.BAD_REQUEST_INVALID_TOKEN);
-        return repository.getByAuthId(authId.get());
+        VwUserProfile result = repository.getByAuthId(authId.get());
+        result.setAvatar(mediaService.getPhotoUrl(BucketSubDirectoryName.AVATAR,result.getAvatar()));
+        return result;
     }
 
     public void editProfile(UserProfileEditRequestDto dto) {
@@ -113,12 +117,12 @@ public class UserService {
         return getVwSearchUsers(userList);
     }
 
-    private static List<VwSearchUser> getVwSearchUsers(List<User> userList) {
+    private List<VwSearchUser> getVwSearchUsers(List<User> userList) {
         List<VwSearchUser> result = new ArrayList<>();
         userList.forEach(u->{
             result.add(
                     VwSearchUser.builder()
-                            .avatar(u.getAvatar())
+                            .avatar(mediaService.getPhotoUrl(BucketSubDirectoryName.AVATAR,u.getAvatar()))
                             .id(u.getId())
                             .name(u.getName())
                             .userName(u.getUserName())

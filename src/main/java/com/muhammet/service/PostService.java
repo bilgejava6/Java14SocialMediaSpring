@@ -52,7 +52,7 @@ public class PostService {
            // VwUserAvatar userAvatar = userAvatarList.stream().filter(x-> x.getId().equals(p.getUserId())).findFirst().get();
             result.add(PostListResponseDto.builder()
                     .postId(p.getId())
-                    .avatar(mapUserList.get(p.getUserId()).getAvatar())
+                    .avatar(mediaService.getPhotoUrl(BucketSubDirectoryName.AVATAR,mapUserList.get(p.getUserId()).getAvatar()))
                     .userName(mapUserList.get(p.getUserId()).getUserName())
                     .userId(p.getUserId())
                     .sharedDate(p.getSharedDate())
